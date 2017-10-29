@@ -12,7 +12,14 @@ ENV T_MAJOR 4.2
 # Install additional distribution packages
 # Despite not all health modules being activated on the demo database, they are all installed:
 # so we chose just tryton-modules-health-all
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update 
+RUN apt-get install -y curl
+
+WORKDIR /home/download
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get -y install nodejs
+
+RUN apt-get install -y --no-install-recommends \
 	# some modules activated on the demo database, but not in depends
 	# https://savannah.gnu.org/task/index.php?13504
 	tryton-modules-purchase \
@@ -32,13 +39,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	python-vatnumber \
 	libreoffice-draw \
 	libreoffice-writer \
+	git \
+	apt-transport-https \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install lxml==3.8 \
 		 trytond_health_profile
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.4 2
 
 # Make the data_path persistent and available to other containers
 VOLUME /var/lib/tryton
 
 # Use a trytond configuration suitable for the gnuhealth postgres demo database
 COPY trytond.conf /etc/tryton/trytond.conf
+
+WORKDIR /usr/local/soa
+RUN git clone -b 4.2 https://github.com/tryton/sao.git /usr/local/soa
+RUN chown tryton /usr/local/soa -R
+RUN cd /usr/local/soa
+RUN npm install -g grunt-cli
+RUN npm install -g bower
+RUN npm install
+RUN bower install --allow-root
+#RUN npm install -g grunt-cli
+RUN grunt
+

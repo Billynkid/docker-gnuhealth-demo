@@ -1,10 +1,10 @@
-db:
-  build: postgres-gnuhealth
-  #image: mbsolutions/postgres-gnuhealth:3.0
-  volumes:
-    - ./postgresql-data:/var/lib/postgresql/data
-  environment:
-    - POSTGRES_PASSWORD=mysecret
+#db:
+#  build: postgres-gnuhealth
+#  #image: mbsolutions/postgres-gnuhealth:3.0
+#  volumes:
+#    - ./postgresql-data:/var/lib/postgresql/data
+#  environment:
+#    - POSTGRES_PASSWORD=mysecret
 
 tryton:
   build: tryton-server-gnuhealth
@@ -15,5 +15,5 @@ tryton:
     - TRYTOND_PASSWORD=admin
   ports:
     - "8000:8000"
-  links:
-    - db
+#  links:
+#    - db
