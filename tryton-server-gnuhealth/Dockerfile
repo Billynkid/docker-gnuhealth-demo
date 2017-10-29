@@ -36,15 +36,19 @@ RUN apt-get install -y --no-install-recommends \
 	libjpeg-dev \
 	python3-pip \
 	python3-dev \
+	python3-psycopg2 \
+	python3-lxml \
 	python-vatnumber \
 	libreoffice-draw \
 	libreoffice-writer \
 	git \
 	apt-transport-https \
+	libpq-dev \
+	postgresql-client \
+	postgresql-client-common \
 	&& rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install lxml==3.8 \
-		 trytond_health_profile
+RUN pip3 install trytond_health_profile
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.4 2
 
